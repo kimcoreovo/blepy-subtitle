@@ -2,6 +2,7 @@
 ![image](https://user-images.githubusercontent.com/36142378/81881805-1536c780-95cc-11ea-9c70-a32e978de90b.png)
 
 블피님 영상을 보고 제작해본 파이썬 자동 자막 제작 스크립트입니다.
+[ZIP 파일로 다운로드](https://github.com/kimcoreovo/blepy-subtitle/archive/master.zip)
 # 필수 라이브러리 설치
 Win + R 을 누르시고 `pip install photoshop_python_api` 를 실행하시면 됩니다.
 # 실행
