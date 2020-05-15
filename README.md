@@ -1,7 +1,7 @@
 # blepy-subtitle
 ![image](https://user-images.githubusercontent.com/36142378/81881805-1536c780-95cc-11ea-9c70-a32e978de90b.png)
 
-[블피님 영상](https://youtu.be/-y2exeNNIR8)을 보고 제작해본 파이썬 자동 자막 제작 스크립트입니다.
+[블피님 영상](https://youtu.be/-y2exeNNIR8)을 보고 제작해본 파이썬 자동 자막 제작 스크립트입니다. **아직은 많이 불안정합니다!**
 
 [ZIP 파일로 다운로드](https://github.com/kimcoreovo/blepy-subtitle/archive/master.zip)
 # 필수 라이브러리 설치
