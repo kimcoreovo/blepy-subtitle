@@ -5,6 +5,7 @@ from tkinter.messagebox import *  # UI 라이브러리
 from tkinter.filedialog import askopenfilename  # 파일 열기 창 띄우는 함수
 from tkinter.filedialog import askdirectory  # 폴더 열기 창 띄우는 함수
 import photoshop.api as ps  # 포토샵 연계 라이브러리
+import comtypes.client as ct
 
 
 def open_subtitle():  # 자막 파일을 불러오는 함수
@@ -36,13 +37,29 @@ def do():  # 포토샵 연계로 자막을 넣는 함수
     except _ctypes.COMError:
         showerror("에러", "먼저 포토샵에서 PSD 파일을 열어주세요.")
         return
-    layer = doc.ArtLayers[int(entry.get()) - 1]  # 레이어 번호로 레이어 불러오기
+    num = str(entry.get())
+    try:  # 레이어 불러오기
+        if "-" in num:  # 그룹으로 구별되어 있을 경우
+            num = num.split("-")
+            layer = doc.layers[int(num[0]) - 1]
+            z = 1
+            while z < len(num):
+                layer = layer.layers[int(num[z]) - 1]
+                z += 1
+        else:
+            layer = doc.layers[int(entry.get()) - 1]  # 레이어 번호만 있을 경우
+    except _ctypes.COMError or IndexError or AttributeError:
+        showerror("에러", "잘못된 레이어 번호입니다.")
+        return
     folder = askdirectory()  # 자막을 저장할 폴더 묻기
+    if folder == "":
+        return
     i = 1
     for subtitle in subtitles:  # 자막 리스트의 자막마다 실행
         layer.TextItem.Contents = subtitle  # 자막 레이어 텍스트 변경
-        path = folder + "\\" + str(i) + ".psd"  # 자막 파일명
+        path = folder + "/" + str(i) + ".png"  # 자막 파일명
         options = ps.PhotoshopSaveOptions()
+        options.layers = True
         options.embedColorProfile = True
         options.alphaChannels = True
         doc.saveAs(path, options, False)  # 다른 이름으로 저장
@@ -53,12 +70,12 @@ def do():  # 포토샵 연계로 자막을 넣는 함수
 def validate(value):  # 레이어 번호 입력시마다 숫자인지 아닌지 체크하는 함수
     if value == "":  # 비어있으면 통과
         return True
-    elif value:
-        try:
-            int(value)
-            return True
-        except ValueError:
-            return False
+    elif value == "-":  # 현재 입력값에 - 밖에 없을 경우
+        return False
+    elif value.endswith("-") and not value.endswith("--"):  # 값이 - 이고 현재 입력값의 마지막이 - 가 아닐경우 통과
+        return True
+    elif value[-1].isnumeric():  # 값이 숫자로 끝날경우 통과
+        return True
     else:
         return False
 
